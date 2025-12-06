@@ -1,6 +1,16 @@
-import { defineDb } from 'astro:db';
+import { defineDb } from "astro:db";
+import {
+  FormulaGroups,
+  Formulas,
+  FormulaExamples,
+  UserFormulaState,
+} from "./tables";
 
-// https://astro.build/db/config
 export default defineDb({
-  tables: {}
+  tables: {
+    FormulaGroups,
+    Formulas,
+    FormulaExamples,
+    UserFormulaState,
+  },
 });
