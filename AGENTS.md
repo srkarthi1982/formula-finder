@@ -26,5 +26,6 @@ MANDATORY: After completing each task, update this repo’s AGENTS.md Task Log (
 
 ## Task Log (Recent)
 - Keep newest first; include date and short summary.
+- 2026-03-25 Implemented Formula Finder V1 (Astro DB single Formulas table + ownership-checked CRUD/actions/API, Alpine global store, /app workspace, detail route, dashboard webhook summary + high-signal notifications, route protection tuned for public landing) and validated via `npm run build`; `npm run typecheck` blocked by private-registry denial for @astrojs/check.
 - 2026-02-09 Added repo-level AGENTS.md enforcement contract (workspace reference + mandatory task-log update rule).
 - 2026-02-09 Initialized repo AGENTS baseline for single-repo Codex/AI safety.

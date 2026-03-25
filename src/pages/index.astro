@@ -1,93 +1,39 @@
 ---
 import AppShell from "../layouts/AppShell.astro";
-import { AvContainer, AvButton } from "@ansiversa/components";
+import { AvButton, AvContainer } from "@ansiversa/components";
 
-const title = "Formula Finder – Ansiversa";
-const description = "Search formulas with explanations.";
+const title = "Formula Finder | Ansiversa";
+const description = "Organize formulas by subject and topic with a premium, focused reference workspace.";
 ---
 
 <AppShell title={title} description={description}>
-  <!-- Hero -->
-  <section class="av-hero">
-    <AvContainer size="narrow" className="av-hero__content--narrow">
-      <div class="av-hero__content">
-        <div class="av-kicker">
-          <span>Learning · Ansiversa Mini App</span>
-        </div>
-        <h1 class="av-gradient-text">Formula Finder</h1>
-        <p>
-          Search formulas with explanations.
-        </p>
-      </div>
-      <div class="av-cta-row">
-        <AvButton href="https://formula-finder.ansiversa.com">Launch Formula</AvButton>
+  <section class="border-b border-white/10">
+    <AvContainer size="narrow" className="py-20">
+      <p class="mb-4 text-sm uppercase tracking-[0.2em] text-sky-300">Ansiversa · Learning Workspace</p>
+      <h1 class="mb-6 text-4xl font-semibold leading-tight text-white sm:text-6xl">Your personal formula library, finally organized.</h1>
+      <p class="max-w-2xl text-lg text-slate-300">
+        Capture formulas with variables, notes, and examples. Keep favorites close, archive without loss, and return to concepts faster.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <AvButton href="/app">Open Formula Finder</AvButton>
       </div>
     </AvContainer>
   </section>
 
-  <!-- Problem -->
-  <section class="av-section">
-    <AvContainer size="narrow">
-      <div class="av-section-header">
-        <h2 class="av-section-title">The problem it solves</h2>
-        <p class="av-section-lead">
-          Learning tools are scattered across tabs, apps, and messy notes.
-        </p>
-      </div>
-      <div class="av-section-body space-y-3 text-slate-300">
-        <p>Formula Finder focuses on one part of your learning flow and keeps it clear.</p>
-      </div>
-    </AvContainer>
-  </section>
-
-  <!-- Why this mini app -->
-  <section class="av-section">
-    <AvContainer size="narrow">
-      <div class="av-section-header">
-        <h2 class="av-section-title">Why Formula Finder feels different</h2>
-        <p class="av-section-lead">
-          A focused mini app inside the larger Ansiversa ecosystem.
-        </p>
-      </div>
-      <div class="av-section-body">
-        <ul class="space-y-2 text-slate-300 list-disc list-inside">
-          <li>Designed specifically for learners, students, and educators.</li>
-          <li>Removes distractions so you can focus on actual understanding.</li>
-          <li>Built on the fast, unified Ansiversa ecosystem.</li>
-        </ul>
-      </div>
-    </AvContainer>
-  </section>
-
-  <!-- How it works -->
-  <section class="av-section">
-    <AvContainer size="narrow">
-      <div class="av-section-header">
-        <h2 class="av-section-title">How it works</h2>
-        <p class="av-section-lead">
-          Simple, clear steps so people can start in under a minute.
-        </p>
-      </div>
-      <ol class="av-section-body space-y-2 text-slate-300 list-decimal list-inside">
-        <li>Open Formula Finder in your browser.</li>
-        <li>Add the topic, content, or material you want to work with.</li>
-        <li>Use the focused tools to learn, revise, or practice within minutes.</li>
-      </ol>
-    </AvContainer>
-  </section>
-
-  <!-- Final CTA -->
-  <section class="av-section">
-    <AvContainer size="narrow">
-      <div class="av-section-header">
-        <h2 class="av-section-title">Ready to try Formula Finder?</h2>
-        <p class="av-section-lead">
-          Open the app, follow the simple flow, and let it handle the heavy lifting.
-        </p>
-      </div>
-      <div class="av-cta-row">
-        <AvButton href="https://formula-finder.ansiversa.com">Start with Formula</AvButton>
-      </div>
+  <section>
+    <AvContainer size="narrow" className="grid gap-5 py-14 sm:grid-cols-3">
+      <article class="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
+        <h2 class="mb-2 text-lg font-medium text-white">Structured formula memory</h2>
+        <p class="text-sm text-slate-300">Store expression, variable explanation, and short notes in one clean record.</p>
+      </article>
+      <article class="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
+        <h2 class="mb-2 text-lg font-medium text-white">Subject-first organization</h2>
+        <p class="text-sm text-slate-300">Group by subject and topic so review sessions stay focused and calm.</p>
+      </article>
+      <article class="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
+        <h2 class="mb-2 text-lg font-medium text-white">Ansiversa connected</h2>
+        <p class="text-sm text-slate-300">Dashboard summaries and high-signal milestones feed into the parent app.</p>
+      </article>
     </AvContainer>
   </section>
 </AppShell>

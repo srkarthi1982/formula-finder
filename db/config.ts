@@ -1,16 +1,8 @@
 import { defineDb } from "astro:db";
-import {
-  FormulaGroups,
-  Formulas,
-  FormulaExamples,
-  UserFormulaState,
-} from "./tables";
+import { Formulas } from "./tables";
 
 export default defineDb({
   tables: {
-    FormulaGroups,
     Formulas,
-    FormulaExamples,
-    UserFormulaState,
   },
 });

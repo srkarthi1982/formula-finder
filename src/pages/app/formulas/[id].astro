@@ -1,0 +1,63 @@
+---
+import AppShell from "../../../layouts/AppShell.astro";
+import AvMiniAppBar from "../../../components/AvMiniAppBar.astro";
+import { getFormulaByIdForUser } from "../../../lib/formulas";
+
+const user = Astro.locals.user;
+if (!user) return Astro.redirect("/");
+
+const id = Number(Astro.params.id);
+if (!Number.isInteger(id)) throw new Error("Invalid formula id");
+
+const formula = await getFormulaByIdForUser(id, user.id);
+if (!formula) return Astro.redirect("/app");
+---
+
+<AppShell title={`${formula.title} | Formula Finder`}>
+  <AvMiniAppBar appKey="formula-finder" />
+  <section class="mx-auto max-w-4xl px-4 py-8 sm:px-6">
+    <a href="/app" class="text-sm text-sky-300 hover:text-sky-200">← Back to workspace</a>
+    <article class="mt-4 rounded-2xl border border-white/10 bg-slate-900/70 p-6">
+      <div class="mb-5 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 class="text-3xl font-semibold text-white">{formula.title}</h1>
+          <p class="text-sm text-slate-400">{formula.subject ?? "general"} · {formula.topic ?? "untagged topic"}</p>
+        </div>
+        <p class="rounded-full bg-white/10 px-3 py-1 text-xs uppercase tracking-wide text-slate-200">{formula.status}</p>
+      </div>
+
+      <div class="space-y-6">
+        <div>
+          <h2 class="mb-2 text-sm uppercase tracking-wide text-slate-400">Expression</h2>
+          <pre class="whitespace-pre-wrap rounded-xl bg-black/30 p-4 text-base text-sky-100">{formula.expression}</pre>
+        </div>
+
+        {formula.variablesText && (
+          <div>
+            <h2 class="mb-2 text-sm uppercase tracking-wide text-slate-400">Variables</h2>
+            <p class="whitespace-pre-wrap text-slate-200">{formula.variablesText}</p>
+          </div>
+        )}
+
+        {formula.notes && (
+          <div>
+            <h2 class="mb-2 text-sm uppercase tracking-wide text-slate-400">Notes</h2>
+            <p class="whitespace-pre-wrap text-slate-200">{formula.notes}</p>
+          </div>
+        )}
+
+        {formula.exampleText && (
+          <div>
+            <h2 class="mb-2 text-sm uppercase tracking-wide text-slate-400">Example</h2>
+            <p class="whitespace-pre-wrap text-slate-200">{formula.exampleText}</p>
+          </div>
+        )}
+
+        <div class="grid gap-2 text-xs text-slate-400 sm:grid-cols-2">
+          <p>Created: {formula.createdAt.toLocaleString()}</p>
+          <p>Updated: {formula.updatedAt.toLocaleString()}</p>
+        </div>
+      </div>
+    </article>
+  </section>
+</AppShell>
