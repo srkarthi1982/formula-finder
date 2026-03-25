@@ -1,6 +1,3 @@
-import { db } from 'astro:db';
-
-// https://astro.build/db/seed
 export default async function seed() {
-	// TODO
+  // V1 intentionally ships without demo seed data.
 }

@@ -1,0 +1,125 @@
+---
+import AppShell from "../../layouts/AppShell.astro";
+import AvMiniAppBar from "../../components/AvMiniAppBar.astro";
+import { listFormulasByUser, summarizeFormulas } from "../../lib/formulas";
+
+const user = Astro.locals.user;
+if (!user) {
+  return Astro.redirect("/");
+}
+
+const formulas = await listFormulasByUser(user.id);
+const summary = summarizeFormulas(formulas);
+const hydration = JSON.stringify({ formulas, summary });
+---
+
+<AppShell title="Formula Finder Workspace">
+  <AvMiniAppBar appKey="formula-finder" />
+
+  <section class="mx-auto max-w-6xl px-4 py-8 sm:px-6" x-data>
+    <script type="application/json" id="formula-data" set:html={hydration}></script>
+    <script is:inline>
+      const payload = JSON.parse(document.getElementById('formula-data')?.textContent || '{}');
+      document.addEventListener('alpine:init', () => {
+        window.Alpine.store('formulaFinder').hydrate(payload);
+      });
+    </script>
+
+    <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <h1 class="text-3xl font-semibold text-white">Formula Workspace</h1>
+        <p class="text-slate-300">Track formulas, favorites, and archive history with clean structure.</p>
+      </div>
+      <button class="rounded-xl bg-white px-4 py-2 text-sm font-medium text-slate-900" @click="$store.formulaFinder.openCreateDrawer()">New Formula</button>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <template x-for="card in [
+        {label:'Total',value:$store.formulaFinder.summary.total},
+        {label:'Active',value:$store.formulaFinder.summary.active},
+        {label:'Favorites',value:$store.formulaFinder.summary.favorites},
+        {label:'Archived',value:$store.formulaFinder.summary.archived},
+        {label:'Updated (7d)',value:$store.formulaFinder.summary.recentlyUpdated},
+        {label:'Subjects',value:$store.formulaFinder.summary.subjectCount},
+      ]">
+        <article class="rounded-2xl border border-white/10 bg-slate-900/70 p-4">
+          <p class="text-xs uppercase tracking-wider text-slate-400" x-text="card.label"></p>
+          <p class="mt-2 text-2xl font-semibold text-white" x-text="card.value"></p>
+        </article>
+      </template>
+    </div>
+
+    <div class="mt-8 rounded-2xl border border-white/10 bg-slate-900/70 p-4">
+      <div class="mb-4 flex flex-wrap gap-2">
+        <template x-for="item in ['overview','formulas','favorites','archived']">
+          <button class="rounded-lg px-3 py-1.5 text-sm"
+            :class="$store.formulaFinder.tab === item ? 'bg-white text-slate-900' : 'bg-white/10 text-slate-200'"
+            @click="$store.formulaFinder.tab = item"
+            x-text="item[0].toUpperCase() + item.slice(1)"></button>
+        </template>
+      </div>
+
+      <div class="grid gap-3 sm:grid-cols-3">
+        <input x-model="$store.formulaFinder.search" type="text" placeholder="Search by title, expression, topic..." class="rounded-lg border border-white/10 bg-slate-950 px-3 py-2 text-sm text-slate-100" />
+        <select x-model="$store.formulaFinder.subjectFilter" class="rounded-lg border border-white/10 bg-slate-950 px-3 py-2 text-sm text-slate-100">
+          <option value="all">All subjects</option>
+          <option value="math">Math</option>
+          <option value="physics">Physics</option>
+          <option value="chemistry">Chemistry</option>
+          <option value="statistics">Statistics</option>
+          <option value="finance">Finance</option>
+          <option value="custom">Custom</option>
+        </select>
+        <input x-model="$store.formulaFinder.topicFilter" type="text" placeholder="Filter by topic" class="rounded-lg border border-white/10 bg-slate-950 px-3 py-2 text-sm text-slate-100" />
+      </div>
+
+      <div class="mt-5 space-y-3">
+        <template x-if="$store.formulaFinder.filteredFormulas.length === 0">
+          <p class="rounded-xl border border-dashed border-white/20 p-6 text-center text-sm text-slate-400">No formulas match this view yet.</p>
+        </template>
+
+        <template x-for="formula in $store.formulaFinder.filteredFormulas" :key="formula.id">
+          <article class="rounded-xl border border-white/10 bg-slate-950/60 p-4">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+              <div>
+                <a class="text-lg font-medium text-white hover:text-sky-300" :href="`/app/formulas/${formula.id}`" x-text="formula.title"></a>
+                <p class="text-xs text-slate-400" x-text="`${formula.subject || 'general'} · ${formula.topic || 'untagged topic'}`"></p>
+              </div>
+              <div class="flex gap-2">
+                <button class="text-sm" @click="$store.formulaFinder.toggleFavorite(formula.id, !formula.isFavorite)" x-text="formula.isFavorite ? '★' : '☆'"></button>
+                <button class="rounded-md bg-white/10 px-2 py-1 text-xs" @click="$store.formulaFinder.openEditDrawer(formula)">Edit</button>
+                <button x-show="formula.status === 'active'" class="rounded-md bg-white/10 px-2 py-1 text-xs" @click="$store.formulaFinder.archiveFormula(formula.id)">Archive</button>
+                <button x-show="formula.status === 'archived'" class="rounded-md bg-white/10 px-2 py-1 text-xs" @click="$store.formulaFinder.restoreFormula(formula.id)">Restore</button>
+              </div>
+            </div>
+            <pre class="mt-3 whitespace-pre-wrap rounded-lg bg-black/30 p-3 text-sm text-sky-100" x-text="formula.expression"></pre>
+          </article>
+        </template>
+      </div>
+    </div>
+
+    <div x-show="$store.formulaFinder.isDrawerOpen" class="fixed inset-0 z-40 flex justify-end bg-black/50 p-3" @click.self="$store.formulaFinder.closeDrawer()">
+      <div class="h-full w-full max-w-xl overflow-y-auto rounded-2xl border border-white/10 bg-slate-900 p-5">
+        <h2 class="text-xl font-semibold text-white" x-text="$store.formulaFinder.isEditing ? 'Edit formula' : 'Create formula'"></h2>
+        <div class="mt-4 space-y-3">
+          <input x-model="$store.formulaFinder.form.title" placeholder="Formula title" class="w-full rounded-lg border border-white/10 bg-slate-950 px-3 py-2 text-sm" />
+          <input x-model="$store.formulaFinder.form.expression" placeholder="Expression" class="w-full rounded-lg border border-white/10 bg-slate-950 px-3 py-2 text-sm" />
+          <div class="grid gap-3 sm:grid-cols-2">
+            <select x-model="$store.formulaFinder.form.subject" class="rounded-lg border border-white/10 bg-slate-950 px-3 py-2 text-sm">
+              <option value="">Subject (optional)</option>
+              <option value="math">Math</option><option value="physics">Physics</option><option value="chemistry">Chemistry</option><option value="statistics">Statistics</option><option value="finance">Finance</option><option value="custom">Custom</option>
+            </select>
+            <input x-model="$store.formulaFinder.form.topic" placeholder="Topic" class="rounded-lg border border-white/10 bg-slate-950 px-3 py-2 text-sm" />
+          </div>
+          <textarea x-model="$store.formulaFinder.form.variablesText" placeholder="Variables explanation" class="h-24 w-full rounded-lg border border-white/10 bg-slate-950 px-3 py-2 text-sm"></textarea>
+          <textarea x-model="$store.formulaFinder.form.notes" placeholder="Short notes" class="h-24 w-full rounded-lg border border-white/10 bg-slate-950 px-3 py-2 text-sm"></textarea>
+          <textarea x-model="$store.formulaFinder.form.exampleText" placeholder="Example (optional)" class="h-24 w-full rounded-lg border border-white/10 bg-slate-950 px-3 py-2 text-sm"></textarea>
+          <div class="flex justify-end gap-2">
+            <button class="rounded-lg bg-white/10 px-3 py-2 text-sm" @click="$store.formulaFinder.closeDrawer()">Cancel</button>
+            <button class="rounded-lg bg-white px-3 py-2 text-sm text-slate-900" :disabled="$store.formulaFinder.isSubmitting" @click="$store.formulaFinder.submitFormula()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</AppShell>
