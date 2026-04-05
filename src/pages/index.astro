@@ -1,39 +1,172 @@
 ---
 import AppShell from "../layouts/AppShell.astro";
-import { AvButton, AvContainer } from "@ansiversa/components";
+import LandingPageStandard from "../components/landing/LandingPageStandard.astro";
+import type { LandingPageContent } from "../lib/landing";
 
 const title = "Formula Finder | Ansiversa";
 const description = "Organize formulas by subject and topic with a premium, focused reference workspace.";
+const rootAppUrl = Astro.locals.rootAppUrl ?? "https://ansiversa.com";
+const appUrl = new URL("/app", Astro.url).toString();
+const signInUrl = new URL("/login", rootAppUrl);
+signInUrl.searchParams.set("returnTo", appUrl);
+const startHref = Astro.locals.isAuthenticated ? "/app" : signInUrl.toString();
+
+const landingContent: LandingPageContent = {
+  categoryLabel: "Learning Reference",
+  appLabel: "Authenticated DB-backed workspace",
+  title: "Keep your formulas organized in a personal reference library.",
+  subtitle:
+    "Store formulas with subject, topic, variables, notes, and example context so review sessions feel cleaner and faster than digging through scattered notes.",
+  heroBullets: [
+    "Save formulas with expression, variables, notes, and optional example text",
+    "Browse by subject and topic while keeping favorites and archived material easy to manage",
+    "Use the library as a personal reference workspace instead of a calculator or solver tool",
+  ],
+  primaryCta: {
+    label: Astro.locals.isAuthenticated ? "Open Workspace" : "Sign in to Open",
+    href: startHref,
+  },
+  secondaryCta: {
+    label: "See Workflow",
+    href: "#workflow",
+    variant: "ghost",
+  },
+  heroNote: "Current V1 is a formula library only. It does not solve expressions or calculate answers.",
+  heroPanel: {
+    eyebrow: "Reference flow",
+    title: "Capture → Organize → Revisit",
+    steps: [
+      "1. Save a formula with the subject context you need",
+      "2. Keep favorites close and archive older material safely",
+      "3. Return later through search, subject, and topic filters",
+    ],
+    meta: [
+      { value: "DB", label: "Persistence" },
+      { value: "Per-user", label: "Ownership" },
+    ],
+  },
+  heroStats: [
+    { value: "Subject-led", label: "Organization" },
+    { value: "Protected", label: "Workspace route" },
+    { value: "Searchable", label: "Library view" },
+  ],
+  features: {
+    title: "What Formula Finder gives you in V1",
+    lead:
+      "The product is about storing and retrieving formulas with structure, not turning the app into a symbolic math engine.",
+    items: [
+      {
+        title: "Structured formula records",
+        description:
+          "Keep title, expression, subject, topic, variable notes, and example text together in one record.",
+      },
+      {
+        title: "Subject and topic organization",
+        description:
+          "Use the current subject set and topic tags to keep revision sessions focused instead of scattered.",
+      },
+      {
+        title: "Favorite high-value formulas",
+        description:
+          "Surface the formulas you return to most often without duplicating records or building separate lists.",
+      },
+      {
+        title: "Archive without losing context",
+        description:
+          "Move older formulas out of the active view while preserving them for later reference.",
+      },
+      {
+        title: "Protected personal library",
+        description:
+          "Routes and API endpoints are scoped to the signed-in user’s formula set.",
+      },
+      {
+        title: "Detail view for full context",
+        description:
+          "Open the formula detail route when you need the complete record instead of a short workspace card.",
+      },
+    ],
+  },
+  pillars: {
+    title: "Why this works better than scattered formula notes",
+    lead:
+      "The library is intentionally narrow in scope, which is what makes the review workflow feel dependable.",
+    items: [
+      {
+        title: "Truthful product boundary",
+        description:
+          "The page and product stay aligned: this is a library for formulas you save, not a live solver.",
+      },
+      {
+        title: "Reference-first design",
+        description:
+          "The structure is built for recall and lookup, with fields that keep formulas understandable on revisit.",
+      },
+      {
+        title: "Personal ownership",
+        description:
+          "User-scoped records keep the workspace private and prevent cross-user exposure.",
+      },
+      {
+        title: "Clean state management",
+        description:
+          "Favorite, archive, restore, search, and filter flows give the library enough depth without turning it into a heavier learning platform.",
+      },
+    ],
+  },
+  workflow: {
+    eyebrow: "How it works",
+    title: "Build a formula library you can return to confidently",
+    lead:
+      "The flow is designed for storing formulas clearly now and retrieving them cleanly later.",
+    steps: [
+      {
+        title: "Save a formula with context",
+        description:
+          "Add the expression, subject, topic, variable explanation, and notes that will make the formula useful on revisit.",
+      },
+      {
+        title: "Organize the workspace",
+        description:
+          "Use subjects, topics, favorites, and archive state to keep the active library focused.",
+      },
+      {
+        title: "Open and review details",
+        description:
+          "Return to the detail route when you need the full record, not just the summary view in the workspace.",
+      },
+    ],
+  },
+  showcase: {
+    eyebrow: "Current product shape",
+    title: "Built for storage and recall, not numeric or symbolic solving",
+    description:
+      "The landing copy reflects the verified implementation: Formula Finder helps you build a cleaner reference set for formulas you want to keep close.",
+    bullets: [
+      "Useful for students and professionals building a reusable formula reference set",
+      "Centered on manual entry, organization, and recall support",
+      "No calculator engine, solver workflow, or symbolic manipulation in V1",
+    ],
+    calloutLabel: "Freeze truth",
+    calloutValue: "Personal formula library only",
+  },
+  finalCta: {
+    title: "Start organizing your formula reference set",
+    description:
+      "Open the workspace, save the formulas you want to keep, and build a calmer library for future review.",
+    primaryCta: {
+      label: Astro.locals.isAuthenticated ? "Open Workspace" : "Sign in to Open",
+      href: startHref,
+    },
+    secondaryCta: {
+      label: "Review Features",
+      href: "#features",
+      variant: "ghost",
+    },
+  },
+};
 ---
 
 <AppShell title={title} description={description}>
-  <section class="border-b border-white/10">
-    <AvContainer size="narrow" className="py-20">
-      <p class="mb-4 text-sm uppercase tracking-[0.2em] text-sky-300">Ansiversa · Learning Workspace</p>
-      <h1 class="mb-6 text-4xl font-semibold leading-tight text-white sm:text-6xl">Your personal formula library, finally organized.</h1>
-      <p class="max-w-2xl text-lg text-slate-300">
-        Capture formulas with variables, notes, and examples. Keep favorites close, archive without loss, and return to concepts faster.
-      </p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <AvButton href="/app">Open Formula Finder</AvButton>
-      </div>
-    </AvContainer>
-  </section>
-
-  <section>
-    <AvContainer size="narrow" className="grid gap-5 py-14 sm:grid-cols-3">
-      <article class="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
-        <h2 class="mb-2 text-lg font-medium text-white">Structured formula memory</h2>
-        <p class="text-sm text-slate-300">Store expression, variable explanation, and short notes in one clean record.</p>
-      </article>
-      <article class="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
-        <h2 class="mb-2 text-lg font-medium text-white">Subject-first organization</h2>
-        <p class="text-sm text-slate-300">Group by subject and topic so review sessions stay focused and calm.</p>
-      </article>
-      <article class="rounded-2xl border border-white/10 bg-slate-900/70 p-5">
-        <h2 class="mb-2 text-lg font-medium text-white">Ansiversa connected</h2>
-        <p class="text-sm text-slate-300">Dashboard summaries and high-signal milestones feed into the parent app.</p>
-      </article>
-    </AvContainer>
-  </section>
+  <LandingPageStandard content={landingContent} />
 </AppShell>

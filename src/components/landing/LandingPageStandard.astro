@@ -1,0 +1,207 @@
+---
+import { AvButton, AvCard, AvContainer } from "@ansiversa/components";
+import type { LandingLink, LandingPageContent } from "../../lib/landing";
+
+interface Props {
+  content: LandingPageContent;
+}
+
+const { content } = Astro.props as Props;
+const buttonVariant = (link?: LandingLink) => (link?.variant === "ghost" ? "ghost" : undefined);
+---
+
+<section class="landing-standard landing-standard--hero">
+  <AvContainer size="default">
+    <div class="landing-standard__hero-grid">
+      <div class="landing-standard__hero-copy">
+        <div class="landing-standard__eyebrow">
+          <span>{content.categoryLabel}</span>
+          {content.appLabel ? <span>{content.appLabel}</span> : null}
+        </div>
+        <h1 class="landing-standard__title">{content.title}</h1>
+        <p class="landing-standard__subtitle">{content.subtitle}</p>
+        <ul class="landing-standard__bullet-list">
+          {content.heroBullets.map((bullet) => <li>{bullet}</li>)}
+        </ul>
+        <div class="landing-standard__cta-row">
+          <AvButton href={content.primaryCta.href} variant={buttonVariant(content.primaryCta)}>{content.primaryCta.label}</AvButton>
+          {content.secondaryCta ? <AvButton href={content.secondaryCta.href} variant={buttonVariant(content.secondaryCta)}>{content.secondaryCta.label}</AvButton> : null}
+        </div>
+        {content.heroNote ? <p class="landing-standard__note">{content.heroNote}</p> : null}
+      </div>
+
+      <AvCard variant="soft" className="landing-standard__hero-panel">
+        <p class="landing-standard__panel-kicker">{content.heroPanel.eyebrow}</p>
+        <h2 class="landing-standard__panel-title">{content.heroPanel.title}</h2>
+        <ol class="landing-standard__panel-steps">
+          {content.heroPanel.steps.map((step) => <li>{step}</li>)}
+        </ol>
+        <div class="landing-standard__panel-meta">
+          {content.heroPanel.meta.map((item) => (
+            <div class="landing-standard__meta-item">
+              <p class="landing-standard__meta-value">{item.value}</p>
+              <p class="landing-standard__meta-label">{item.label}</p>
+            </div>
+          ))}
+        </div>
+      </AvCard>
+    </div>
+
+    {content.heroStats?.length ? (
+      <div class="landing-standard__stats-row">
+        {content.heroStats.map((stat) => (
+          <div class="landing-standard__stat">
+            <p class="landing-standard__stat-value">{stat.value}</p>
+            <p class="landing-standard__stat-label">{stat.label}</p>
+          </div>
+        ))}
+      </div>
+    ) : null}
+  </AvContainer>
+</section>
+
+<section class="landing-standard__section" id="features">
+  <AvContainer size="default">
+    <div class="landing-standard__section-header">
+      <h2 class="landing-standard__section-title">{content.features.title}</h2>
+      <p class="landing-standard__section-lead">{content.features.lead}</p>
+    </div>
+    <div class="landing-standard__card-grid">
+      {content.features.items.map((item) => (
+        <AvCard variant="soft" className="landing-standard__info-card">
+          <h3 class="landing-standard__card-title">{item.title}</h3>
+          <p class="landing-standard__card-text">{item.description}</p>
+        </AvCard>
+      ))}
+    </div>
+  </AvContainer>
+</section>
+
+<section class="landing-standard__section" id="pillars">
+  <AvContainer size="default">
+    <div class="landing-standard__section-header">
+      <h2 class="landing-standard__section-title">{content.pillars.title}</h2>
+      <p class="landing-standard__section-lead">{content.pillars.lead}</p>
+    </div>
+    <div class="landing-standard__pillar-grid">
+      {content.pillars.items.map((item, index) => (
+        <AvCard variant="soft" className="landing-standard__pillar-card">
+          <p class="landing-standard__pillar-index">Pillar {String(index + 1).padStart(2, "0")}</p>
+          <h3 class="landing-standard__card-title">{item.title}</h3>
+          <p class="landing-standard__card-text">{item.description}</p>
+        </AvCard>
+      ))}
+    </div>
+  </AvContainer>
+</section>
+
+<section class="landing-standard__section" id="workflow">
+  <AvContainer size="default">
+    <div class="landing-standard__section-header">
+      {content.workflow.eyebrow ? <p class="landing-standard__mini-kicker">{content.workflow.eyebrow}</p> : null}
+      <h2 class="landing-standard__section-title">{content.workflow.title}</h2>
+      <p class="landing-standard__section-lead">{content.workflow.lead}</p>
+    </div>
+    <ol class="landing-standard__workflow-list">
+      {content.workflow.steps.map((step, index) => (
+        <li class="landing-standard__workflow-step">
+          <span class="landing-standard__workflow-number">{index + 1}</span>
+          <div>
+            <h3 class="landing-standard__card-title">{step.title}</h3>
+            <p class="landing-standard__card-text">{step.description}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </AvContainer>
+</section>
+
+{content.showcase ? (
+  <section class="landing-standard__section" id="showcase">
+    <AvContainer size="default">
+      <AvCard variant="soft" className="landing-standard__showcase">
+        <div class="landing-standard__showcase-copy">
+          <p class="landing-standard__mini-kicker">{content.showcase.eyebrow}</p>
+          <h2 class="landing-standard__section-title">{content.showcase.title}</h2>
+          <p class="landing-standard__section-lead">{content.showcase.description}</p>
+        </div>
+        <div class="landing-standard__showcase-panel">
+          <ul class="landing-standard__bullet-list landing-standard__bullet-list--compact">
+            {content.showcase.bullets.map((bullet) => <li>{bullet}</li>)}
+          </ul>
+          {content.showcase.calloutLabel && content.showcase.calloutValue ? (
+            <div class="landing-standard__showcase-callout">
+              <p class="landing-standard__showcase-label">{content.showcase.calloutLabel}</p>
+              <p class="landing-standard__showcase-value">{content.showcase.calloutValue}</p>
+            </div>
+          ) : null}
+        </div>
+      </AvCard>
+    </AvContainer>
+  </section>
+) : null}
+
+<section class="landing-standard__section landing-standard__section--last">
+  <AvContainer size="default">
+    <AvCard variant="soft" className="landing-standard__final-cta">
+      <div class="landing-standard__final-copy">
+        <h2 class="landing-standard__section-title">{content.finalCta.title}</h2>
+        <p class="landing-standard__section-lead">{content.finalCta.description}</p>
+      </div>
+      <div class="landing-standard__cta-row">
+        <AvButton href={content.finalCta.primaryCta.href} variant={buttonVariant(content.finalCta.primaryCta)}>{content.finalCta.primaryCta.label}</AvButton>
+        {content.finalCta.secondaryCta ? <AvButton href={content.finalCta.secondaryCta.href} variant={buttonVariant(content.finalCta.secondaryCta)}>{content.finalCta.secondaryCta.label}</AvButton> : null}
+      </div>
+    </AvCard>
+  </AvContainer>
+</section>
+
+<style>
+  .landing-standard { position: relative; }
+  .landing-standard--hero { padding: 3.5rem 0 2rem; }
+  .landing-standard--hero::before { content: ""; position: absolute; inset: 0; background: radial-gradient(circle at top left, rgba(94, 234, 212, 0.12), transparent 32%), radial-gradient(circle at top right, rgba(125, 211, 252, 0.14), transparent 30%); pointer-events: none; }
+  .landing-standard__hero-grid { position: relative; display: grid; gap: 1.5rem; }
+  .landing-standard__hero-copy, .landing-standard__hero-panel, .landing-standard__info-card, .landing-standard__pillar-card, .landing-standard__showcase, .landing-standard__final-cta { border: 1px solid rgba(148, 163, 184, 0.16); box-shadow: 0 18px 40px rgba(15, 23, 42, 0.24); }
+  .landing-standard__hero-copy { padding: 1.75rem; border-radius: 1.5rem; background: linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.76)), rgba(15, 23, 42, 0.9); }
+  .landing-standard__eyebrow { display: flex; flex-wrap: wrap; gap: 0.625rem; margin-bottom: 1rem; }
+  .landing-standard__eyebrow span, .landing-standard__mini-kicker, .landing-standard__panel-kicker, .landing-standard__pillar-index, .landing-standard__showcase-label { color: rgba(191, 219, 254, 0.88); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; }
+  .landing-standard__eyebrow span { display: inline-flex; align-items: center; padding: 0.45rem 0.75rem; border-radius: 999px; background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(148, 163, 184, 0.18); }
+  .landing-standard__title { margin: 0; font-size: clamp(2.5rem, 5vw, 4.25rem); line-height: 1.02; letter-spacing: -0.04em; color: white; }
+  .landing-standard__subtitle, .landing-standard__section-lead, .landing-standard__card-text, .landing-standard__note, .landing-standard__stat-label, .landing-standard__meta-label { color: rgba(226, 232, 240, 0.78); }
+  .landing-standard__subtitle { margin: 1rem 0 0; max-width: 48rem; font-size: 1.05rem; line-height: 1.7; }
+  .landing-standard__bullet-list { margin: 1.25rem 0 0; padding: 0; list-style: none; display: grid; gap: 0.75rem; }
+  .landing-standard__bullet-list li { position: relative; padding-left: 1.1rem; color: rgba(241, 245, 249, 0.94); }
+  .landing-standard__bullet-list li::before { content: ""; position: absolute; top: 0.6rem; left: 0; width: 0.45rem; height: 0.45rem; border-radius: 999px; background: linear-gradient(135deg, #5eead4, #7dd3fc); box-shadow: 0 0 0 0.22rem rgba(125, 211, 252, 0.12); }
+  .landing-standard__cta-row { display: flex; flex-wrap: wrap; gap: 0.875rem; margin-top: 1.5rem; }
+  .landing-standard__note { margin: 1rem 0 0; }
+  .landing-standard__hero-panel { padding: 1.5rem; border-radius: 1.5rem; background: linear-gradient(180deg, rgba(17, 24, 39, 0.92), rgba(15, 23, 42, 0.82)), rgba(15, 23, 42, 0.88); }
+  .landing-standard__panel-title, .landing-standard__section-title, .landing-standard__card-title { margin: 0; line-height: 1.2; color: white; }
+  .landing-standard__panel-title { margin-top: 0.5rem; font-size: 1.5rem; }
+  .landing-standard__panel-steps { margin: 1rem 0 0; padding-left: 1.1rem; display: grid; gap: 0.6rem; color: rgba(241, 245, 249, 0.94); }
+  .landing-standard__panel-meta, .landing-standard__stats-row { display: grid; gap: 0.875rem; margin-top: 1.25rem; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+  .landing-standard__meta-item, .landing-standard__stat { padding: 0.85rem 1rem; border-radius: 1rem; background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(148, 163, 184, 0.14); }
+  .landing-standard__meta-value, .landing-standard__stat-value { margin: 0; font-size: 1.2rem; font-weight: 600; color: rgba(248, 250, 252, 0.98); }
+  .landing-standard__meta-label, .landing-standard__stat-label { margin: 0.25rem 0 0; font-size: 0.9rem; }
+  .landing-standard__section { padding: 1rem 0 1.25rem; }
+  .landing-standard__section--last { padding-bottom: 3rem; }
+  .landing-standard__section-header { max-width: 48rem; margin-bottom: 1.25rem; }
+  .landing-standard__section-title { font-size: clamp(1.8rem, 3vw, 2.7rem); letter-spacing: -0.03em; }
+  .landing-standard__section-lead { margin: 0.75rem 0 0; line-height: 1.7; }
+  .landing-standard__card-grid, .landing-standard__pillar-grid { display: grid; gap: 1rem; }
+  .landing-standard__info-card, .landing-standard__pillar-card { padding: 1.25rem; border-radius: 1.25rem; background: linear-gradient(180deg, rgba(15, 23, 42, 0.82), rgba(15, 23, 42, 0.7)), rgba(15, 23, 42, 0.78); }
+  .landing-standard__card-text { margin: 0.7rem 0 0; line-height: 1.7; }
+  .landing-standard__workflow-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 1rem; }
+  .landing-standard__workflow-step { display: grid; grid-template-columns: auto 1fr; gap: 1rem; padding: 1.1rem 1.2rem; border-radius: 1.25rem; background: rgba(15, 23, 42, 0.56); border: 1px solid rgba(148, 163, 184, 0.14); }
+  .landing-standard__workflow-number { display: inline-flex; align-items: center; justify-content: center; width: 2.3rem; height: 2.3rem; border-radius: 999px; background: linear-gradient(135deg, rgba(94, 234, 212, 0.24), rgba(125, 211, 252, 0.22)); border: 1px solid rgba(125, 211, 252, 0.32); color: rgba(248, 250, 252, 0.98); font-weight: 700; }
+  .landing-standard__showcase { display: grid; gap: 1rem; padding: 1.5rem; border-radius: 1.5rem; background: linear-gradient(160deg, rgba(12, 18, 32, 0.96), rgba(17, 24, 39, 0.8)), rgba(15, 23, 42, 0.88); }
+  .landing-standard__showcase-panel { padding: 1rem; border-radius: 1.2rem; background: rgba(15, 23, 42, 0.55); border: 1px solid rgba(148, 163, 184, 0.14); }
+  .landing-standard__bullet-list--compact { margin-top: 0; }
+  .landing-standard__showcase-callout { margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(148, 163, 184, 0.14); }
+  .landing-standard__showcase-value { margin: 0.35rem 0 0; color: rgba(248, 250, 252, 0.98); font-size: 1.15rem; font-weight: 600; }
+  .landing-standard__final-cta { display: grid; gap: 1rem; padding: 1.5rem; border-radius: 1.5rem; background: linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(15, 23, 42, 0.82)), rgba(15, 23, 42, 0.88); }
+  @media (min-width: 768px) {
+    .landing-standard__hero-grid, .landing-standard__showcase, .landing-standard__final-cta { grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr); align-items: stretch; }
+    .landing-standard__card-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .landing-standard__pillar-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>

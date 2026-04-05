@@ -25,6 +25,7 @@ MANDATORY: After completing each task, update this repo’s AGENTS.md Task Log (
 - Review this repo's existing AGENTS.md Task Log history before making changes.
 
 ## Task Log (Recent)
+- 2026-04-05 Adopted Landing Page Standard V1 as the pilot landing rollout: replaced the minimal public landing with the new premium section-based structure (hero, value grid, pillars, workflow, showcase, final CTA), added repo-local landing contract/component files for reuse in this pilot, and kept copy aligned to the verified DB-backed V1 formula-library behavior (authenticated `/app`, create/edit/favorite/archive, detail view, no solver/calculator claims). Verification: `npm run typecheck` ✅ (existing inline-script hint only), `npm run build` ✅, local dev route check for `/` confirmed the new sections and sign-in CTA markup render.
 - 2026-04-05 Completed spec-driven Freeze Level 1 verification; fixed remote DB schema compatibility, restored API/formula toolchain health, and added safe validation/not-found handling for formula routes and endpoints.
 - 2026-03-30 Populated app-spec.md with implementation-aligned V1 documentation based on current repo behavior and conservative pre-verification review.
 - 2026-03-30 Initialized app-spec.md using standard V1 template from web repo.
