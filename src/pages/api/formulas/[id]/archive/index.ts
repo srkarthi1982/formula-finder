@@ -6,6 +6,7 @@ import { jsonResponse, requireApiUser } from "../../../../../lib/http";
 export const POST: APIRoute = async ({ locals, params }) => {
   const user = requireApiUser(locals);
   const id = Number(params.id);
+  if (!Number.isInteger(id)) return jsonResponse({ error: "Formula not found." }, 404);
 
   const formula = await setFormulaArchivedState(id, user.id, "archived");
   if (!formula) return jsonResponse({ error: "Formula not found." }, 404);

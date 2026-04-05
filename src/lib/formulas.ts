@@ -1,5 +1,4 @@
-import { and, db, desc, eq } from "astro:db";
-import { Formulas } from "../../db/tables";
+import { and, db, desc, eq, Formulas } from "astro:db";
 
 export type FormulaStatus = "active" | "archived";
 export type FormulaSubject = "math" | "physics" | "chemistry" | "statistics" | "finance" | "custom";

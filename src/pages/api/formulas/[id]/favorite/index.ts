@@ -10,6 +10,7 @@ import { jsonResponse, requireApiUser } from "../../../../../lib/http";
 export const POST: APIRoute = async ({ locals, params, request }) => {
   const user = requireApiUser(locals);
   const id = Number(params.id);
+  if (!Number.isInteger(id)) return jsonResponse({ error: "Formula not found." }, 404);
   const payload = await request.json().catch(() => ({}));
 
   const formula = await toggleFormulaFavoriteForUser(id, user.id, payload?.isFavorite);

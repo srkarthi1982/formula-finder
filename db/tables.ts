@@ -3,8 +3,15 @@ import { column, defineTable, NOW } from "astro:db";
 export const Formulas = defineTable({
   columns: {
     id: column.number({ primaryKey: true, autoIncrement: true }),
-    userId: column.text(),
-    title: column.text(),
+    groupId: column.number({ optional: true, deprecated: true }),
+    name: column.text({ optional: true, deprecated: true }),
+    description: column.text({ optional: true, deprecated: true }),
+    variables: column.text({ optional: true, deprecated: true }),
+    meta: column.text({ optional: true, deprecated: true }),
+    difficulty: column.text({ optional: true, deprecated: true }),
+    isActive: column.boolean({ optional: true, deprecated: true }),
+    userId: column.text({ default: "" }),
+    title: column.text({ default: "" }),
     subject: column.text({
       optional: true,
       enum: ["math", "physics", "chemistry", "statistics", "finance", "custom"],

@@ -1,4 +1,5 @@
 import type { APIRoute } from "astro";
+import { createFormulaSchema } from "../../../lib/formulaSchemas";
 import {
   createFormulaForUser,
   listFormulasByUser,
@@ -24,9 +25,13 @@ export const GET: APIRoute = async ({ locals, url }) => {
 
 export const POST: APIRoute = async ({ locals, request }) => {
   const user = requireApiUser(locals);
-  const payload = await request.json();
+  const payload = createFormulaSchema.safeParse(await request.json().catch(() => null));
 
-  const formula = await createFormulaForUser(user.id, payload);
+  if (!payload.success) {
+    return jsonResponse({ error: "Invalid formula payload.", issues: payload.error.issues }, 400);
+  }
+
+  const formula = await createFormulaForUser(user.id, payload.data);
   const formulas = await listFormulasByUser(user.id);
   const summary = summarizeFormulas(formulas);
 

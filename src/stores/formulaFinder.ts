@@ -25,6 +25,43 @@ type Summary = {
   subjectCount: number;
 };
 
+type FormulaForm = {
+  title: string;
+  subject: string;
+  topic: string;
+  expression: string;
+  variablesText: string;
+  notes: string;
+  exampleText: string;
+};
+
+type FormulaFinderStore = {
+  formulas: Formula[];
+  summary: Summary;
+  search: string;
+  tab: string;
+  subjectFilter: string;
+  topicFilter: string;
+  activeFormula: Formula | null;
+  isDrawerOpen: boolean;
+  isEditing: boolean;
+  isSubmitting: boolean;
+  flash: { type: string; message: string };
+  form: FormulaForm;
+  hydrate(payload: { formulas: Formula[]; summary: Summary }): void;
+  openCreateDrawer(): void;
+  openEditDrawer(formula: Formula): void;
+  closeDrawer(): void;
+  setFlash(type: "success" | "error", message: string): void;
+  readonly filteredFormulas: Formula[];
+  refresh(): Promise<void>;
+  recomputeSummary(): void;
+  submitFormula(): Promise<void>;
+  archiveFormula(id: number): Promise<void>;
+  restoreFormula(id: number): Promise<void>;
+  toggleFavorite(id: number, next?: boolean): Promise<void>;
+};
+
 const blankForm = {
   title: "",
   subject: "",
@@ -36,7 +73,7 @@ const blankForm = {
 };
 
 export function registerFormulaFinderStore(Alpine: Alpine) {
-  Alpine.store("formulaFinder", {
+  const formulaFinder: FormulaFinderStore = {
     formulas: [] as Formula[],
     summary: {} as Summary,
     search: "",
@@ -177,5 +214,7 @@ export function registerFormulaFinderStore(Alpine: Alpine) {
       });
       await this.refresh();
     },
-  });
+  };
+
+  Alpine.store("formulaFinder", formulaFinder);
 }
