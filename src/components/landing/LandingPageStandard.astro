@@ -13,6 +13,7 @@ const pillarTimelineItems = content.pillars.items.map((item, index) => ({
   title: item.title,
   body: item.description,
 }));
+const [leadFeature, ...supportingFeatures] = content.features.items;
 ---
 
 <section class="av-hero landing-standard">
@@ -79,49 +80,81 @@ const pillarTimelineItems = content.pillars.items.map((item, index) => ({
 
 <section class="av-section" id="features">
   <AvContainer size="default">
-    <div class="av-section-header landing-standard__section-header">
-      <h2 class="av-section-title">{content.features.title}</h2>
-      <p class="av-section-lead">{content.features.lead}</p>
-    </div>
-    <div class="av-grid-auto av-grid-auto--260">
-      {content.features.items.map((item) => (
-        <AvCard variant="soft" className="av-auth-stack-sm av-card--fullheight landing-standard__feature-card">
-          <h3 class="av-card-heading">{item.title}</h3>
-          <p class="av-text-soft">{item.description}</p>
-        </AvCard>
-      ))}
+    <div class="landing-standard__features-grid">
+      <div class="landing-standard__features-intro">
+        <div class="av-section-header landing-standard__section-header">
+          <h2 class="av-section-title">{content.features.title}</h2>
+          <p class="av-section-lead">{content.features.lead}</p>
+        </div>
+
+        {leadFeature ? (
+          <div class="landing-standard__feature-highlight">
+            <p class="av-kicker"><span>Lead value</span></p>
+            <h3 class="landing-standard__feature-highlight-title">{leadFeature.title}</h3>
+            <p class="landing-standard__feature-highlight-copy">{leadFeature.description}</p>
+          </div>
+        ) : null}
+      </div>
+
+      <div class="landing-standard__feature-list" role="list">
+        {supportingFeatures.map((item) => (
+          <article class="landing-standard__feature-item" role="listitem">
+            <h3 class="av-card-heading">{item.title}</h3>
+            <p class="av-text-soft landing-standard__body-copy">{item.description}</p>
+          </article>
+        ))}
+      </div>
     </div>
   </AvContainer>
 </section>
 
 <section class="av-section" id="pillars">
   <AvContainer size="default">
-    <div class="av-section-header landing-standard__section-header">
-      <h2 class="av-section-title">{content.pillars.title}</h2>
-      <p class="av-section-lead">{content.pillars.lead}</p>
+    <div class="landing-standard__pillars-grid">
+      <div class="landing-standard__pillars-intro">
+        <div class="av-section-header landing-standard__section-header landing-standard__section-header--tight">
+          <h2 class="av-section-title">{content.pillars.title}</h2>
+          <p class="av-section-lead">{content.pillars.lead}</p>
+        </div>
+
+        {content.pillars.items.slice(0, 2).map((item, index) => (
+          <div class:list={["landing-standard__pillar-highlight", index === 0 ? "landing-standard__pillar-highlight--strong" : undefined]}>
+            <p class="av-kicker"><span>{`Focus ${String(index + 1).padStart(2, "0")}`}</span></p>
+            <h3 class="av-card-heading">{item.title}</h3>
+            <p class="av-text-soft landing-standard__body-copy">{item.description}</p>
+          </div>
+        ))}
+      </div>
+
+      <div class="landing-standard__pillars-timeline">
+        <AvTimeline items={pillarTimelineItems} />
+      </div>
     </div>
-    <AvTimeline items={pillarTimelineItems} />
   </AvContainer>
 </section>
 
 <section class="av-section" id="workflow">
   <AvContainer size="default">
-    <div class="av-section-header landing-standard__section-header">
-      {content.workflow.eyebrow ? <div class="av-kicker"><span>{content.workflow.eyebrow}</span></div> : null}
-      <h2 class="av-section-title">{content.workflow.title}</h2>
-      <p class="av-section-lead">{content.workflow.lead}</p>
+    <div class="landing-standard__workflow-grid">
+      <div class="av-section-header landing-standard__section-header landing-standard__section-header--compact">
+        {content.workflow.eyebrow ? <div class="av-kicker"><span>{content.workflow.eyebrow}</span></div> : null}
+        <h2 class="av-section-title">{content.workflow.title}</h2>
+        <p class="av-section-lead">{content.workflow.lead}</p>
+      </div>
+      <div class="landing-standard__workflow-body">
+        <ol class="av-steps">
+          {content.workflow.steps.map((step, index) => (
+            <li class="av-step">
+              <span class="av-step-number">{index + 1}</span>
+              <div class="av-step-body">
+                <h3 class="av-card-heading">{step.title}</h3>
+                <p>{step.description}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
     </div>
-    <ol class="av-steps">
-      {content.workflow.steps.map((step, index) => (
-        <li class="av-step">
-          <span class="av-step-number">{index + 1}</span>
-          <div class="av-step-body">
-            <h3 class="av-card-heading">{step.title}</h3>
-            <p>{step.description}</p>
-          </div>
-        </li>
-      ))}
-    </ol>
   </AvContainer>
 </section>
 
@@ -139,9 +172,9 @@ const pillarTimelineItems = content.pillars.items.map((item, index) => ({
             ))}
           </ul>
         </div>
-        <AvCard variant="soft" className="landing-standard__showcase-panel av-auth-stack-sm">
+        <div class="landing-standard__showcase-aside">
           {content.showcase.calloutLabel && content.showcase.calloutValue ? (
-            <div>
+            <div class="landing-standard__showcase-callout">
               <p class="av-kicker"><span>{content.showcase.calloutLabel}</span></p>
               <p class="landing-standard__showcase-value">{content.showcase.calloutValue}</p>
             </div>
@@ -149,7 +182,7 @@ const pillarTimelineItems = content.pillars.items.map((item, index) => ({
           <p class="av-text-soft landing-standard__showcase-note">
             Use this section only when the product needs one extra layer of clarity beyond features and workflow.
           </p>
-        </AvCard>
+        </div>
       </div>
     </AvContainer>
   </section>
@@ -157,8 +190,8 @@ const pillarTimelineItems = content.pillars.items.map((item, index) => ({
 
 <section class="av-section">
   <AvContainer size="default">
-    <AvCard variant="soft" className="av-row-between av-card--fullheight landing-standard__final-cta">
-      <div class="av-auth-stack-xxs">
+    <div class="landing-standard__final-cta">
+      <div class="av-auth-stack-xxs landing-standard__final-copy">
         <h2 class="av-section-title">{content.finalCta.title}</h2>
         <p class="av-text-soft">{content.finalCta.description}</p>
       </div>
@@ -172,11 +205,19 @@ const pillarTimelineItems = content.pillars.items.map((item, index) => ({
           </AvButton>
         ) : null}
       </div>
-    </AvCard>
+    </div>
   </AvContainer>
 </section>
 
 <style>
+  .landing-standard {
+    --landing-copy-soft: rgba(203, 213, 225, 0.72);
+    --landing-copy-strong: rgba(248, 250, 252, 0.98);
+    --landing-line: rgba(148, 163, 184, 0.14);
+    --landing-line-soft: rgba(148, 163, 184, 0.08);
+    --landing-surface: rgba(15, 23, 42, 0.22);
+  }
+
   .landing-standard__hero-title {
     max-width: 11ch;
     font-size: clamp(2.1rem, 4vw, 3.2rem);
@@ -191,8 +232,29 @@ const pillarTimelineItems = content.pillars.items.map((item, index) => ({
     max-width: 44rem;
   }
 
+  .landing-standard__hero-copy :global(.av-section-lead),
+  .landing-standard__section-header :global(.av-section-lead),
+  .landing-standard__body-copy,
+  .landing-standard__showcase-note,
+  .landing-standard__showcase-copy :global(.av-section-lead),
+  .landing-standard__final-copy :global(.av-text-soft) {
+    color: var(--landing-copy-soft);
+  }
+
+  .landing-standard__hero-copy :global(.av-section-title),
+  .landing-standard__section-header :global(.av-section-title),
+  .landing-standard__feature-highlight-title {
+    margin-bottom: 0.65rem;
+  }
+
+  .landing-standard__hero-list {
+    max-width: 38rem;
+  }
+
   .landing-standard__hero-panel {
     align-self: start;
+    border-color: var(--landing-line);
+    background: rgba(15, 23, 42, 0.2);
   }
 
   .landing-standard__panel-steps {
@@ -211,7 +273,7 @@ const pillarTimelineItems = content.pillars.items.map((item, index) => ({
     margin: 0;
     font-size: 1rem;
     font-weight: 600;
-    color: rgba(248, 250, 252, 0.98);
+    color: var(--landing-copy-strong);
   }
 
   .landing-standard__stats-row {
@@ -221,26 +283,113 @@ const pillarTimelineItems = content.pillars.items.map((item, index) => ({
   .landing-standard__stat {
     padding: 0.45rem 0.75rem;
     border-radius: 999px;
-    border: 1px solid rgba(148, 163, 184, 0.16);
-    background: rgba(15, 23, 42, 0.3);
+    border: 1px solid var(--landing-line);
+    background: rgba(15, 23, 42, 0.18);
   }
 
-  .landing-standard__feature-card {
-    border-color: rgba(148, 163, 184, 0.12);
-  }
-
+  .landing-standard__features-grid,
+  .landing-standard__pillars-grid,
+  .landing-standard__workflow-grid,
   .landing-standard__showcase-grid {
     display: grid;
-    gap: 1.25rem;
+    gap: 1.5rem;
     align-items: start;
+  }
+
+  .landing-standard__section-header--tight {
+    max-width: 38rem;
+  }
+
+  .landing-standard__section-header--compact {
+    max-width: 30rem;
+  }
+
+  .landing-standard__features-intro,
+  .landing-standard__pillars-intro {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .landing-standard__feature-highlight {
+    padding: 1.15rem 0 0.1rem;
+    border-top: 1px solid var(--landing-line);
+  }
+
+  .landing-standard__feature-highlight-title {
+    font-size: clamp(1.35rem, 2vw, 1.7rem);
+    line-height: 1.15;
+    color: var(--landing-copy-strong);
+  }
+
+  .landing-standard__feature-highlight-copy {
+    max-width: 34rem;
+    margin: 0;
+    color: var(--landing-copy-soft);
+  }
+
+  .landing-standard__feature-list {
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--landing-line-soft);
+  }
+
+  .landing-standard__feature-item {
+    padding: 1.05rem 0;
+    border-bottom: 1px solid var(--landing-line-soft);
+  }
+
+  .landing-standard__pillar-highlight {
+    padding: 1rem 0;
+    border-top: 1px solid var(--landing-line-soft);
+  }
+
+  .landing-standard__pillar-highlight--strong {
+    padding-top: 0.2rem;
+    border-top: 0;
+  }
+
+  .landing-standard__pillars-timeline {
+    min-width: 0;
+  }
+
+  .landing-standard__workflow-body :global(.av-steps) {
+    margin: 0;
+  }
+
+  .landing-standard__showcase-copy {
+    max-width: 40rem;
+  }
+
+  .landing-standard__showcase-aside {
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+    padding-top: 0.35rem;
+    border-top: 1px solid var(--landing-line);
   }
 
   .landing-standard__showcase-list {
     margin-top: 1rem;
   }
 
+  .landing-standard__showcase-callout {
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid var(--landing-line-soft);
+  }
+
   .landing-standard__showcase-note {
     margin: 0;
+  }
+
+  .landing-standard__final-cta {
+    display: grid;
+    gap: 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--landing-line);
+  }
+
+  .landing-standard__final-copy {
+    max-width: 40rem;
   }
 
   .landing-standard__final-actions {
@@ -248,8 +397,22 @@ const pillarTimelineItems = content.pillars.items.map((item, index) => ({
   }
 
   @media (min-width: 768px) {
+    .landing-standard__features-grid,
+    .landing-standard__pillars-grid,
+    .landing-standard__workflow-grid {
+      grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+      column-gap: 2.75rem;
+    }
+
     .landing-standard__showcase-grid {
-      grid-template-columns: minmax(0, 1.3fr) minmax(240px, 0.8fr);
+      grid-template-columns: minmax(0, 1.25fr) minmax(240px, 0.65fr);
+      column-gap: 2.5rem;
+    }
+
+    .landing-standard__final-cta {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      column-gap: 2rem;
     }
   }
 </style>
